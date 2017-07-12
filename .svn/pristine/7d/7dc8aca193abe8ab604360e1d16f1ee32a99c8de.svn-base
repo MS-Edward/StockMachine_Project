@@ -1,0 +1,54 @@
+package Ticker;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Scanner;
+import java.util.function.Function;
+
+public class URLPriceExtractor
+{
+    InputStream input;
+
+    public double getCurrentStockPrice(String stockSymbol)
+    {
+        String buffer = connectToURL(stockSymbol);
+
+        return parser(buffer);
+    }
+
+    public String connectToURL(String stockSymbol)
+    {
+        String csvURL = "http://ichart.finance.yahoo.com/table.csv?s=" + stockSymbol;
+        String buffer;
+        double stockPrice = 0;
+        try
+        {
+            input = new URL(csvURL).openStream();
+            Scanner fileReader = new Scanner(input);
+            buffer = fileReader.nextLine();
+            buffer = fileReader.nextLine();
+            return buffer;
+        }
+        catch(IOException e)
+        {
+            return "URL Connection Failed";
+        }
+    }
+
+    private double parser(String buffer)
+    {
+        Scanner stringReader = new Scanner(buffer);
+        String ignore;
+        stringReader.useDelimiter(",");
+
+        for(int i = 0; i < 6; i++)
+        {
+            ignore = stringReader.next();
+        }
+        return stringReader.nextDouble();
+    }
+}

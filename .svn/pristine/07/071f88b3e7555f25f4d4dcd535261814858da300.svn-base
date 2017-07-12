@@ -1,0 +1,40 @@
+package Ticker;
+
+
+import java.util.*;
+import java.util.function.Function;
+
+public class TickerCalculator {
+
+    public double calculateValue(double tickerprice, int numshares)
+    {
+        return tickerprice * numshares;
+
+    }
+
+    public double calculateNetAssestValue(List<Double> values)
+    {
+        return values.stream()
+                     .mapToDouble(e -> e)
+                     .sum();
+
+    }
+
+    public HashMap<String, Double> computeValueAndNet(HashMap<String, Integer> map, Function<String, Double> func)
+    {
+
+        HashMap<String, Double> symbolvalue = new HashMap<>();
+        List<Double> netassetofvalues = new ArrayList<>();
+           for (Object o : map.entrySet()) {
+
+                Map.Entry symbol = (Map.Entry) o;
+                symbolvalue.put((String) symbol.getKey(), calculateValue(func.apply((String) symbol.getKey()), map.get(symbol.getKey())));
+                netassetofvalues.add(symbolvalue.get(symbol.getKey()));
+                
+            }
+
+        symbolvalue.put("Net Asset", calculateNetAssestValue(netassetofvalues));
+
+        return symbolvalue;
+    }
+}

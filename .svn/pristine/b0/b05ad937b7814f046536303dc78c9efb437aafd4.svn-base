@@ -1,0 +1,15 @@
+package Ticker;
+
+public class StockMachineMain
+{
+    public static void main(String[] args)
+    {
+        TickerCalculator tickerMachine = new TickerCalculator();
+        fileReader reader = new fileReader();
+
+        reader.openFile();
+        reader.readFromFile(tickerMachine);
+
+        tickerMachine.computeValueAndNet(tickerMachine.SymbolesSharesMap,tickerMachine.priceExtractor);
+    }
+}

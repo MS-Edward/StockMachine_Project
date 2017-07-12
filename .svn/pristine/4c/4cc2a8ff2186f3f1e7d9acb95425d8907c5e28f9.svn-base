@@ -1,0 +1,70 @@
+package ticker;
+
+import Ticker.TickerCalculator;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.function.Function;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+public class TickerCalculatorTest {
+
+    TickerCalculator ticker;
+
+    @Before
+    public void setUp()
+    {
+        ticker = new TickerCalculator();
+        ticker.SymbolesSharesMap = new HashMap<>();
+    }
+
+    @Test
+    public void testCanary()
+    {
+        assertTrue(true);
+    }
+
+    @Test
+    public void TestTotalAssetCalculation()
+    {
+        assertEquals(1000.0, ticker.calculateValue(100.0, 10), .0001);
+    }
+
+    @Test
+    public void testCalculateNetAssetValue()
+    {
+
+        List<Double> values = Arrays.asList(1.0, 2.0, 3.0, 4.0, 5.0);
+        assertEquals(15, ticker.calculateNetAssestValue(values), .0001);
+    }
+
+    @Test
+    public void TestComputeStockValuesAndNetAsset()
+    {
+        Function<String, Double> stock= x->
+        {
+            return 10.00;
+        };
+
+        //HashMap<String, Integer> SymbolesSharesMap = new HashMap<>();
+        ticker.SymbolesSharesMap.put("GOOG", 12);
+        ticker.SymbolesSharesMap.put("AMZN", 10);
+        ticker.SymbolesSharesMap.put("EBAY", 9);
+        ticker.SymbolesSharesMap.put("MSFT", 8);
+
+        HashMap<String, Double> checkhashmap = new HashMap<>();
+        checkhashmap.put("GOOG", 120.0);
+        checkhashmap.put("AMZN", 100.0);
+        checkhashmap.put("EBAY", 90.0);
+        checkhashmap.put("MSFT", 80.0);
+        checkhashmap.put("Net Asset", 390.0);
+
+        assertEquals(checkhashmap, ticker.computeValueAndNet( ticker.SymbolesSharesMap, stock));
+    }
+
+}

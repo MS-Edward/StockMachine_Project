@@ -1,0 +1,58 @@
+package Ticker;
+
+import java.util.*;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
+import java.util.function.Function;
+
+public class TickerCalculator
+{
+    public double calculateValue(double tickerPrice, int numShares)
+    {
+        return tickerPrice * numShares;
+    }
+
+    public double calculateNetAssestValue(List<Double> values)
+    {
+        return values.stream()
+                     .mapToDouble(e -> e)
+                     .sum();
+    }
+
+    public Map<String, Double> computeValueAndNet(HashMap<String, Integer> shares, Function<String, Double> priceFinder )
+    {
+
+       Map<String, Double> shareValues =
+         shares.keySet()
+            .stream()
+            .collect(toMap(ticker -> ticker,
+              ticker -> calculateValue(priceFinder.apply(ticker), shares.get(ticker))));
+      
+      double net = 
+        calculateNetAssestValue(shareValues.values()
+                                           .stream()
+                                           .collect(toList()));
+                                           
+      shareValues.put("Net Asset", net);
+      return shareValues;
+       /*
+      change the return type of the method from HashMap<string, Double> to Map<String, Double>
+
+        double value;
+        List<Double> netassetofvalues = new ArrayList<>();
+           for (Object o : map.entrySet())
+           {
+
+                Map.Entry symbol = (Map.Entry) o;
+                value = calculateValue(func.apply((String) symbol.getKey()), map.get(symbol.getKey()));
+                df.format(value);
+                symbolvalue.put((String) symbol.getKey(),value);
+                netassetofvalues.add(symbolvalue.get(symbol.getKey()));
+            }
+
+        symbolvalue.put("Net Asset", calculateNetAssestValue(netassetofvalues));
+
+        return symbolvalue;
+        */
+    }
+}

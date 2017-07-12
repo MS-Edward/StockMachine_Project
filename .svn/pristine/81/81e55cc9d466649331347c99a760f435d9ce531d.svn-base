@@ -1,0 +1,35 @@
+package Ticker;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Scanner;
+import java.io.File;
+
+public class fileReader
+{
+    File file = new File("userStocks.txt");
+    InputStream fin;
+
+    public  void openFile()
+    {
+        try
+        {
+            fin = new FileInputStream(file);
+        }
+        catch(IOException e)
+        {System.out.println("Failed to open");}
+    }
+
+    public void readFromFile(TickerCalculator tickerMachine)
+    {
+        Scanner scr = new Scanner(fin);
+        scr.useDelimiter(",");
+
+        while(scr.hasNext())
+        {
+            tickerMachine.SymbolesSharesMap.put(scr.next(),scr.nextInt());
+        }
+    }
+}

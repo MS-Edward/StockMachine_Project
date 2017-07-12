@@ -1,0 +1,23 @@
+package Ticker;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
+public class StockMachineMain
+{
+    public static void main(String[] args)
+    {
+        TickerCalculator tickerMachine = new TickerCalculator();
+        URLPriceExtractor extractor = new URLPriceExtractor();
+        fileReader reader = new fileReader();
+        Map<String, Integer> SharesMap;
+
+        reader.openFile();
+        SharesMap = reader.readFromFile();
+
+        Function<String, Double> priceExtractor = e -> extractor.getCurrentStockPrice(e);
+        System.out.println(tickerMachine.computeValueAndNet(SharesMap,priceExtractor));
+        System.out.println(SharesMap);
+    }
+}

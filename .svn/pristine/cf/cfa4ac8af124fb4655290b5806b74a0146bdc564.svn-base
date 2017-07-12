@@ -1,0 +1,72 @@
+package Ticker;
+
+
+import java.util.*;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
+import java.util.function.Function;
+import java.text.DecimalFormat;
+
+public class TickerCalculator
+{
+    public HashMap<String, Integer> SymbolesSharesMap;
+    HashMap<String, Double> symbolvalue = new HashMap<>();
+    public URLPriceExtractor extractor = new URLPriceExtractor();
+    DecimalFormat df = new DecimalFormat(".00");
+
+    public TickerCalculator()
+    {
+        SymbolesSharesMap = new HashMap<>();
+    }
+
+    public double calculateValue(double tickerprice, int numshares)
+    {
+        return tickerprice * numshares;
+
+    }
+
+    public double calculateNetAssestValue(List<Double> values)
+    {
+        return values.stream()
+                     .mapToDouble(e -> e)
+                     .sum();
+    }
+
+    public HashMap<String, Double> computeValueAndNet(HashMap<String, Integer> map, Function<String, Double> func)
+    {
+      /*
+       Map<String, Double> shareValues =
+         map.keySet()
+            .stream()
+            .collect(toMap(ticker -> ticker,
+              ticker -> calculateValue(func.apply(ticker), map.get(ticker))));
+      
+      double net = 
+        calculateNetAssestValue(shareValues.values()
+                                           .stream()
+                                           .collect(toList()));
+                                           
+      shareValues.put("Net Asset", net);
+      return shareValues;
+      
+      change the return type of the method from HashMap<string, Double> to Map<String, Double>
+      */
+        double value;
+        List<Double> netassetofvalues = new ArrayList<>();
+           for (Object o : map.entrySet())
+           {
+
+                Map.Entry symbol = (Map.Entry) o;
+                value = calculateValue(func.apply((String) symbol.getKey()), map.get(symbol.getKey()));
+                df.format(value);
+                symbolvalue.put((String) symbol.getKey(),value);
+                netassetofvalues.add(symbolvalue.get(symbol.getKey()));
+            }
+
+        symbolvalue.put("Net Asset", calculateNetAssestValue(netassetofvalues));
+
+        return symbolvalue;
+    }
+
+    Function<String, Double> priceExtractor = e ->{return extractor.getCurrentStockPrice(e);};
+}

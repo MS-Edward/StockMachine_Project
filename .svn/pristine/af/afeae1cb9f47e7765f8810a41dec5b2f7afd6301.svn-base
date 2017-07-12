@@ -1,0 +1,53 @@
+package ticker;
+
+import Ticker.URLPriceExtractor;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+import java.util.function.Function;
+
+public class URLPriceExtractorTest 
+{
+    URLPriceExtractor extractor;
+
+    @Before
+    public void setUp()
+    {
+        extractor = new URLPriceExtractor();
+    }
+
+    @Test
+    public void testCanary()
+    {
+        assertTrue(true);
+    }
+
+    @Test
+    public void testValidTickerPriceIsGreaterThanZero()
+    {
+        assertTrue(extractor.getCurrentStockPrice("goog") > 0);
+    }
+
+    @Test
+    public void testInvalidURL()
+    {
+
+        assertTrue(extractor.connectToURL("appl").equals("URL Connection Failed"));
+    }
+
+    @Test
+    public void testParser()
+    {
+        assertTrue(extractor.getCurrentStockPrice("goog") > 0);
+    }
+
+    @Test
+    public void HOLD()
+    {
+        Function<String, Double> temp = e ->{return extractor.getCurrentStockPrice(e);};
+        double x = temp.apply("goog");
+
+    }
+
+
+}
